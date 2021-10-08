@@ -21,17 +21,29 @@ function dibujarSprite() {
 
     var cuadros = sprite.width / anchoSprite;
 
+    ctx.save();
+    // parametros: eje x, eje y
+    ctx.scale(jugador.direccion, 1);
+
+    // si el jugador mira hacia la izquierda
+    if (jugador.direccion === -1) {
+        ctx.translate(-anchoSprite * PROPORCION_SPRITE, 0)
+    }
+
     ctx.drawImage(
         sprite,
-        (cuadroActual % 11) * anchoSprite, // posicion x de la img
+        cuadroActual * anchoSprite, // posicion x de la img
         0, // posicion y de la img
         anchoSprite, // ancho de la imagen
         altoSprite, // alto de la imagen
-        0, // posicion x del canvas
+        jugador.direccion * jugador.x, // posicion x del canvas
         0, // posicion y del canvas
         anchoSprite * PROPORCION_SPRITE, // ancho del canvas
         altoSprite * PROPORCION_SPRITE // alto de canvas
     );
+
+    ctx.restore();
+
     cuadroActual++;
 
     // Resetea animación
@@ -46,6 +58,7 @@ function ejecutarBucle() {
 
     borrarPantalla();
     dibujarSprite();
+    procesarControles();
 
     window.requestAnimationFrame(ejecutarBucle);
 }
